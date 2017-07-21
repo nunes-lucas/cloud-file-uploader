@@ -1,0 +1,5 @@
+.idea
+/target
+*.iml
+client_secret.json
+*.log
