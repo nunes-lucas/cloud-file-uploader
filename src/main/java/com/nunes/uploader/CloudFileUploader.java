@@ -64,13 +64,13 @@ public class CloudFileUploader {
                             uploadFiles(newFolderID, Arrays.asList(children));
                         }
                     } catch (IOException e) {
-                        logger.error("ERROR creating folder: {}", file.getAbsoluteFile());
+                        logger.error("Error creating folder: {}", e, file.getAbsoluteFile());
                     }
                 } else if (file.isFile()) {
                     try {
                         driveService.createOrUploadFile(folderID, file);
                     } catch (IOException e) {
-                        logger.error("ERROR uploading file: {}", file.getAbsoluteFile());
+                        logger.error("Error uploading file: {}", e, file.getAbsoluteFile());
                     }
                 }
             } else {
