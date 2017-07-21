@@ -24,6 +24,7 @@ For example
 ## Run
 
 ```
+$ mvn install
 $ mvn exec:java
 ```
 
