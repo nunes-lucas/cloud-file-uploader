@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class GDriveRepositoryImpl extends GDrive implements Repository {
     private static final Logger logger = LoggerFactory.getLogger(GDriveRepositoryImpl.class);
 
-
     private static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 
     private Drive driveService;
@@ -131,7 +130,7 @@ public class GDriveRepositoryImpl extends GDrive implements Repository {
         if (parentFolderId == null) {
             return Collections.emptyMap();
         }
-        String query = "mimeType!='" + FOLDER_MIME_TYPE;
+        String query = "mimeType!='" + FOLDER_MIME_TYPE + "'";
         return listFilesByQuery(query, parentFolderId);
     }
 
@@ -139,7 +138,7 @@ public class GDriveRepositoryImpl extends GDrive implements Repository {
         if (parentFolderId == null) {
             return Collections.emptyMap();
         }
-        String query = "mimeType='" + FOLDER_MIME_TYPE;
+        String query = "mimeType='" + FOLDER_MIME_TYPE + "'";
         return listFilesByQuery(query, parentFolderId);
     }
 
@@ -149,7 +148,7 @@ public class GDriveRepositoryImpl extends GDrive implements Repository {
 
         do {
             FileList result = driveService.files().list()
-                    .setQ(query + "' and '" + parentFolderId + "' in parents and trashed = false")
+                    .setQ(query + " and '" + parentFolderId + "' in parents and trashed = false")
                     .setSpaces("drive")
                     .setFields("nextPageToken, files(*)")
                     .setPageToken(pageToken)
