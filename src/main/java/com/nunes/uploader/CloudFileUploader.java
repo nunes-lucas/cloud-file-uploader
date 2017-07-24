@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class CloudFileUploader {
     private static final Logger logger = LoggerFactory.getLogger(CloudFileUploader.class);
 
-
     private static final String BACKUP_FOLDER_NAME = "Backup_" + System.getProperty("user.name");
     private static Repository driveService;
 
