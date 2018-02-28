@@ -35,5 +35,5 @@ And then the app will start upload the files and directories you listed on **bac
 ## Alternative Run (jar file)
 
 ```
-$ java -jar target/cloud-file-uploader-1.0-SNAPSHOT-jar-with-dependencies.jar
+$ java -jar target/cloud-file-uploader-1.0-SNAPSHOT-jar-with-dependencies.jar <folder_name_in_gdrive> <backup_list_file>
 ```
