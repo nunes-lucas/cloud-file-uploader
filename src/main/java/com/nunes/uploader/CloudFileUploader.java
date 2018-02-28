@@ -1,5 +1,6 @@
 package com.nunes.uploader;
 
+import com.google.common.base.Strings;
 import com.nunes.uploader.repository.Repository;
 import com.nunes.uploader.repository.gdrive.GDriveRepositoryImpl;
 
@@ -17,21 +18,44 @@ import java.util.stream.Collectors;
 public class CloudFileUploader {
     private static final Logger logger = LoggerFactory.getLogger(CloudFileUploader.class);
 
-    private static final String BACKUP_FOLDER_NAME = "Backup_" + System.getProperty("user.name");
+    //Folder where files will be uploaded in GDrive
+    private static final String DEFAULT_BACKUP_FOLDER_NAME = "Backup_" + System.getProperty("user.name");
+    //File in user home directory containing the list of folders and files to be uploaded
+    private static final String DEFAULT_BACKUP_FILE_NAME = System.getProperty("user.home") + "/backup_files";
     private static Repository driveService;
+    private static String folderName = DEFAULT_BACKUP_FOLDER_NAME;
+    private static String fileName = DEFAULT_BACKUP_FILE_NAME;
 
     public static void main(String[] args) throws IOException {
         logger.info("Started files upload");
 
+        readOptions(args);
+
         driveService = new GDriveRepositoryImpl();
 
-        List<java.io.File> files = readFilesToBackup();
+        List<java.io.File> files = readFilesToBackup(fileName);
 
-        String rootFolderId = driveService.findOrCreateFolder(BACKUP_FOLDER_NAME);
+        String rootFolderId = driveService.findOrCreateFolder(folderName);
 
         uploadFiles(rootFolderId, files);
 
         logger.info("End files upload");
+    }
+
+    private static void readOptions(String[] args) {
+        try {
+            if (!Strings.isNullOrEmpty(args[0])) {
+                folderName = args[0];
+                logger.info("Using folder name: [{}]", folderName);
+            }
+
+            if (!Strings.isNullOrEmpty(args[1])) {
+                fileName = args[1];
+                logger.info("Using file name: [{}]", fileName);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            logger.warn("Missing folder of file, using default values.");
+        }
     }
 
     /**
@@ -39,9 +63,7 @@ public class CloudFileUploader {
      * @return List of files
      * @throws IOException
      */
-    private static List<File> readFilesToBackup() throws IOException {
-        String fileName = System.getProperty("user.home") + "/backup_files";
-
+    private static List<File> readFilesToBackup(String fileName) throws IOException {
         return Files.lines(Paths.get(fileName)).map(File::new).collect(Collectors.toList());
     }
 
